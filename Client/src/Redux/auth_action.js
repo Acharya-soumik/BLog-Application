@@ -54,7 +54,7 @@ export const fetchLogin = ({ email, pass }) => {
 export const fetchRegister = ({ email, pass, name }) => {
   return dispatch => {
     axios
-      .post("http://localhost:5000/auth/signup", {
+      .post("http://localhost:5000/signup", {
         email: email,
         password: pass,
         username: name

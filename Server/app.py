@@ -273,11 +273,33 @@ def edit_blogs():
     return json.dumps(items, default=str)
 
 
-# @app.route('/uploader', methods=["POST"])
-# def upload_file():
-#     f = request.files['picture']
-#     location = "static/img/" + f.filename
-#     f.save(location)
-#     return {"path": location}
+@app.route("/delete_blogs", methods=["POST"])
+def delete_post():
+    user_id = request.json["user_id"]
+    u_id = request.json["id"]
+    c_id = request.json["catagory_id"]
+    cursor = mysql.connection.cursor()
+    cursor.execute(
+        """delete from  comments  where user_id = %s and blog_id=%s and catagory_id=%s """, (
+            user_id, u_id, c_id)
+    )
+
+    cursor.execute(
+        """delete from  blog  where user_id = %s and id=%s and catagory_id=%s """, (
+            user_id, u_id, c_id)
+    )
+    mysql.connection.commit()
+    cursor.close()
+    return "user deleted"
+
+
+@app.route('/uploader', methods=["POST"])
+def upload_file():
+    f = request.files['picture']
+    location = "../Client/public/image/" + f.filename
+    f.save(location)
+    return {"path": location}
+
+
 if __name__ == "__main__":
     app.run(debug=True)

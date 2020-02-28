@@ -45,7 +45,7 @@ function Navbar(props) {
 
   return (
     <Layout style={{ height: "100vh" }}>
-      <Sider trigger={null} collapsible collapsed={collapsed}>
+      <Sider trigger={null} color="white" collapsible collapsed={collapsed}>
         {toggle ? (
           <Avatar
             icon="user"
@@ -126,26 +126,30 @@ function Navbar(props) {
               </Menu.Item>
             </SubMenu>
           )}
-          <SubMenu
-            key="sub4"
-            title={
-              <span>
-                <Icon type="setting" />
-                <span>Profile Settings</span>
-              </span>
-            }
-          >
-            <Menu.Item key="11">
-              <Link to="/profile">Edit Profile</Link>
-            </Menu.Item>
-            <Menu.Item key="10">
-              <Link to="/edit_profile">Edit Your Blogs</Link>
-            </Menu.Item>
-          </SubMenu>
+          {toggle ? (
+            <SubMenu
+              key="sub4"
+              title={
+                <span>
+                  <Icon type="setting" />
+                  <span>Profile Settings</span>
+                </span>
+              }
+            >
+              <Menu.Item key="11">
+                <Link to="/profile">Edit Profile</Link>
+              </Menu.Item>
+              <Menu.Item key="10">
+                <Link to="/edit_profile">Edit Your Blogs</Link>
+              </Menu.Item>
+            </SubMenu>
+          ) : (
+            <span></span>
+          )}
         </Menu>
       </Sider>
       <Layout>
-        <Header style={{ background: "#fff", padding: 0 }}>
+        <Header style={{ background: "#A9BED2", padding: 0 }}>
           <Icon
             className="trigger"
             type={collapsed ? "menu-unfold" : "menu-fold"}

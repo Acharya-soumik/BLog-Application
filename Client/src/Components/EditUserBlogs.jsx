@@ -46,61 +46,81 @@ function EditUserBlogs() {
   const handleCancel = e => {
     setVisible(false);
   };
+  const deleteBlogHandler = async obj => {
+    setLoading(true);
+    await axios
+      .post("http://127.0.0.1:5000/delete_blogs", obj)
+      .then(res => console.log(res));
+    setLoading(false);
+  };
   if (loading) {
     return <h2>Loading....</h2>;
   } else {
     return (
       <div className="text-center">
         <h2>User Blogs : </h2>
-        {blogs.map(ele => {
-          return (
-            <>
-              <Card
-                style={{ width: 300 }}
-                className="m-auto"
-                cover={
-                  <img
-                    alt="example"
-                    src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
-                  />
-                }
-                actions={[
-                  <Icon type="edit" key="edit" onClick={() => showModal(ele)} />
-                ]}
-              >
-                <Meta
-                  avatar={
-                    <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
+        <div className="row">
+          {blogs.map(ele => {
+            return (
+              <>
+                <Card
+                  key={ele.id}
+                  style={{ width: 300 }}
+                  className="m-auto"
+                  cover={
+                    <img
+                      alt="example"
+                      src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
+                    />
                   }
-                  title={ele.title}
-                  description={ele.content}
-                />
-                <Modal
-                  title="Edit User Details"
-                  visible={visible}
-                  onOk={handleOk}
-                  onCancel={handleCancel}
+                  actions={[
+                    <Icon
+                      type="edit"
+                      key="edit"
+                      onClick={() => showModal(ele)}
+                    />,
+
+                    <Icon
+                      type="delete"
+                      key="del"
+                      onClick={() => deleteBlogHandler(ele)}
+                    />
+                  ]}
                 >
-                  <input
-                    className="form-control"
-                    onChange={e =>
-                      setInput({ ...input, title: e.target.value })
+                  <Meta
+                    avatar={
+                      <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
                     }
-                    value={input.title}
+                    title={ele.title}
+                    description={ele.content}
                   />
-                  <input
-                    className="form-control"
-                    onChange={e =>
-                      setInput({ ...input, content: e.target.value })
-                    }
-                    value={input.content}
-                  />
-                  <small>Craeted at: {ele.created_at}</small>
-                </Modal>
-              </Card>
-            </>
-          );
-        })}
+                  <Modal
+                    title="Edit User Details"
+                    visible={visible}
+                    onOk={handleOk}
+                    onCancel={handleCancel}
+                  >
+                    <input
+                      className="form-control"
+                      onChange={e =>
+                        setInput({ ...input, title: e.target.value })
+                      }
+                      value={input.title}
+                    />
+                    <input
+                      className="form-control"
+                      onChange={e =>
+                        setInput({ ...input, content: e.target.value })
+                      }
+                      value={input.content}
+                    />
+                    <small>Craeted at: {ele.created_at}</small>
+                  </Modal>
+                </Card>
+              </>
+            );
+          })}
+        </div>
       </div>
     );
   }

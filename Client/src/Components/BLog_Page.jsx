@@ -45,7 +45,7 @@ function BLog_Page(props) {
     return <h2>Loading...</h2>;
   } else {
     return (
-      <div className="position-absolute text-center  p-4">
+      <div className="text-center  p-4">
         <div className="card m-auto col-md-6 rounded p-4">
           <h2 className="text-light bg-dark p-4 rounded">{user.title}</h2>
           <p className="text-light bg-dark p-4 rounded ">{user.content}</p>
