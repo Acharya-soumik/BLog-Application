@@ -48,8 +48,14 @@ function EditUserBlogs() {
   };
   const deleteBlogHandler = async obj => {
     setLoading(true);
+    let token = JSON.parse(localStorage.getItem("token"));
     await axios
-      .post("http://127.0.0.1:5000/delete_blogs", obj)
+      .post("http://127.0.0.1:5000/delete_blogs", obj, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `bearer ${token}`
+        }
+      })
       .then(res => console.log(res));
     setLoading(false);
   };

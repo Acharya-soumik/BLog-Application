@@ -278,19 +278,23 @@ def delete_post():
     user_id = request.json["user_id"]
     u_id = request.json["id"]
     c_id = request.json["catagory_id"]
-    cursor = mysql.connection.cursor()
-    cursor.execute(
-        """delete from  comments  where user_id = %s and blog_id=%s and catagory_id=%s """, (
-            user_id, u_id, c_id)
-    )
+    auth_header = request.headers.get('Authorization')
+    if auth_header is None:
+        return "Cannot Delete"
+    else:
+        cursor = mysql.connection.cursor()
+        cursor.execute(
+            """delete from  comments  where user_id = %s and blog_id=%s and catagory_id=%s """, (
+                user_id, u_id, c_id)
+        )
 
-    cursor.execute(
-        """delete from  blog  where user_id = %s and id=%s and catagory_id=%s """, (
-            user_id, u_id, c_id)
-    )
-    mysql.connection.commit()
-    cursor.close()
-    return "user deleted"
+        cursor.execute(
+            """delete from  blog  where user_id = %s and id=%s and catagory_id=%s """, (
+                user_id, u_id, c_id)
+        )
+        mysql.connection.commit()
+        cursor.close()
+        return "user deleted"
 
 
 @app.route('/uploader', methods=["POST"])
