@@ -1,0 +1,5 @@
+.full-width {
+  min-width: 100%;
+  height: 700px !important;
+  background-color: black;
+}
