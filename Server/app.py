@@ -203,6 +203,17 @@ def catagories():
     return json.dumps(list_catagory)
 
 
+@app.route("/new_category", methods=["POST"])
+def newCategory():
+    category = request.json["category"]
+    cursor = mysql.connection.cursor()
+    cursor.execute(
+        """insert into catagory (catagories) values (%s) """, (category,))
+    mysql.connection.commit()
+    cursor.close()
+    return "category added"
+
+
 @app.route("/new_comment", methods=["POST"])
 def new_comment():
     comment = request.json["comment"]
@@ -219,7 +230,8 @@ def new_comment():
 def all_blogs():
     cursor = mysql.connection.cursor()
     cursor.execute(
-        """SELECT * FROM blog """
+        """select blog.id ,title,content ,blog.created_at,name,email from blog join user on blog.user_id = user.id 
+"""
     )
     result = cursor.fetchall()
     cursor.close()
@@ -300,6 +312,7 @@ def delete_post():
 @app.route('/uploader', methods=["POST"])
 def upload_file():
     f = request.files['picture']
+    print("=======>", f)
     location = "../Client/public/image/" + f.filename
     f.save(location)
     return {"path": location}

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Comment, Icon, Tooltip, Avatar, Collapse } from "antd";
+import { Link } from "react-router-dom";
 
 function BLog_Page(props) {
   const { Panel } = Collapse;
@@ -84,6 +85,9 @@ function BLog_Page(props) {
             </Panel>
           </Collapse>
         </div>
+        <Link to="/" className="badge badge-dark mt-4 p-1">
+          Back to Blogs
+        </Link>
       </div>
     );
   }

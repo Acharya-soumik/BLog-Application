@@ -31,6 +31,7 @@ function Home() {
       .then(res => setAllComments(res.data));
     setLoading(false);
   };
+  console.log(blogs);
   if (loading == true) {
     return <h2>Loading...</h2>;
   } else {
@@ -42,8 +43,9 @@ function Home() {
             return (
               <Card
                 className="m-4"
+                key={ele.id}
                 style={{ width: 400 }}
-                title={ele.created_at}
+                title={ele.name}
               >
                 <h2>{ele.title}</h2>
                 <Link
@@ -57,6 +59,8 @@ function Home() {
                 >
                   View More
                 </Link>
+                <hr />
+                <small>Created At : {ele.created_at}</small>
               </Card>
             );
           })}

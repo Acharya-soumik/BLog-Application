@@ -12,6 +12,7 @@ import { Menu, Layout, Avatar, Icon } from "antd";
 import { Link } from "react-router-dom";
 import BLog_Page from "../Components/BLog_Page";
 import EditUserBlogs from "../Components/EditUserBlogs";
+import Admin from "../Components/Admin";
 import { log_out } from "../Redux/auth_action";
 import "antd/dist/antd.css";
 
@@ -142,6 +143,9 @@ function Navbar(props) {
               <Menu.Item key="10">
                 <Link to="/edit_profile">Edit Your Blogs</Link>
               </Menu.Item>
+              <Menu.Item key="15">
+                <Link to="/admin">Admin Panel</Link>
+              </Menu.Item>
             </SubMenu>
           ) : (
             <span></span>
@@ -149,7 +153,8 @@ function Navbar(props) {
         </Menu>
       </Sider>
       <Layout>
-        <Header style={{ background: "#A9BED2", padding: 0 }}>
+        <Header style={{ background: "#A9BED2", padding: 10 }}>
+          <div className="logo" />
           <Icon
             className="trigger"
             type={collapsed ? "menu-unfold" : "menu-fold"}
@@ -190,6 +195,7 @@ function Navbar(props) {
               path="/users/:id"
               component={props => <BLog_Page {...props} />}
             />
+            <Route path="/admin" component={() => <Admin />} />
             <Route path="/edit_profile" component={() => <EditUserBlogs />} />
           </Switch>
         </Content>

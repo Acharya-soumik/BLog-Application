@@ -9,12 +9,14 @@ function UserProfile() {
 
   const data = {
     name: "picture",
+    userName: "soumik",
     multiple: false,
     action: "http://127.0.0.1:5000/uploader",
     onChange(info) {
       const { status } = info.file;
       if (status === "done") {
         message.success(`${info.file.name} file uploaded successfully.`);
+        setImg(info.file.response.path);
       } else if (status === "error") {
         message.error(`${info.file.name} file upload failed.`);
       }
