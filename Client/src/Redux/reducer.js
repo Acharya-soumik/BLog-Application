@@ -11,7 +11,6 @@ const initialState = {
   register: ""
 };
 const reducer = (state = initialState, action) => {
-  console.log("called reducer here");
   switch (action.type) {
     case LOGIN_SUCCESS:
       let cond = false;
@@ -44,7 +43,6 @@ const reducer = (state = initialState, action) => {
       };
 
     default:
-      console.log("default redcer");
       return state;
   }
 };

@@ -28,11 +28,10 @@ function BLog_Page(props) {
     let b_id = props.match.params.id;
     let data = {
       comment: newComment,
-      user_id: user.user_id,
+      user_id: user.id,
       blog_id: parseInt(b_id),
       catagory_id: user.catagory_id
     };
-    console.log(data);
     setLoading(true);
     axios
       .post("http://localhost:5000/new_comment", data)
@@ -40,7 +39,6 @@ function BLog_Page(props) {
 
     setLoading(false);
   };
-  console.log(comment);
 
   if (loading) {
     return <h2>Loading...</h2>;
@@ -67,6 +65,7 @@ function BLog_Page(props) {
               </div>
               {comment.map(ele => (
                 <Comment
+                  key={ele.id}
                   author={<a>User</a>}
                   avatar={
                     <Avatar

@@ -25,12 +25,12 @@ def read_data():
     cursor.execute(
         """SELECT * FROM user """
     )
-    result = cursor.fetchall()
+    res = cursor.fetchall()
     cursor.close()
-    items = []
-    for i in result:
-        items.append(i)
-    return items
+    item = []
+    for i in res:
+        item.append(i)
+    return item
 
 
 def CreateUser(name, email, salt, hashed_pass):
@@ -83,21 +83,34 @@ def write_csv(name, email, password):
 
 
 def check_auth(email, password):
-    data = read_data()
-    for items in data:
-        print(items)
-        if items["email"] != email:
-            return {"status": "Incorrect Email address"}
-        elif items["email"] == email:
-            user_salt = items["salt"]
-            user_pass = items["password"]
-        hex_pass = md5_hash(password, user_salt)
-        if hex_pass == user_pass:
-            token = jwt.encode(
-                {"id": items["id"], "email": items["email"]}, 'secret', algorithm="HS256")
-            return {"status": "login succesfull", "token": str(token), "u_id": items["id"]}
-        else:
-            return {"status": "Incorrect Password"}
+    cursor = mysql.connection.cursor()
+    cursor.execute("""select * from user where email=%s""", (email,))
+    res = cursor.fetchall()
+    cursor.close()
+    if len(res) == 0:
+        return {"status": "Incorrect Email Address"}
+    else:
+        user_salt = res[0]["salt"]
+        user_pass = res[0]["password"]
+    hex_pass = md5_hash(password, user_salt)
+    if hex_pass == user_pass:
+        token = jwt.encode(
+            {"id": res[0]["id"], "email": res[0]["email"]}, "secret", algorithm="HS256")
+        return {"status": "login succesfull", "token": str(token), "u_id": res[0]["id"]}
+    else:
+        return {"status": "Incorrect Password"}
+
+    #    if val["email"] != email:
+    #         return {"status": "Incorrect Email Address"}
+    #     elif val["email"] == email:
+    #         user_salt = val["salt"]
+    #         user_pass = val["password"]
+    #     hex_pass = md5_hash(password, user_salt)
+    #     if hex_pass == user_pass:
+    #         token = jwt.encode(
+    #             {"id": val["id"], "email": val["email"]}, 'secret', algorithm="HS256")
+    #         return {"status": "login succesfull", "token": str(token), "u_id": val["id"]}
+    #     else:
 
 
 def find_user(u_id):
@@ -191,8 +204,8 @@ def showDetails():
 def new_blog():
     title = request.json["title"]
     content = request.json["content"]
-    user_id = 1,
-    catagory_id = 2
+    user_id = request.json["user_id"]
+    catagory_id = request.json["catagory_id"]
     CreateBlog(title, content, user_id, catagory_id)
     return "New Post Added"
 
@@ -230,7 +243,7 @@ def new_comment():
 def all_blogs():
     cursor = mysql.connection.cursor()
     cursor.execute(
-        """select blog.id ,title,content ,blog.created_at,name,email from blog join user on blog.user_id = user.id 
+        """select blog.id as blog_id ,user.id as id,catagory_id,title,content ,blog.created_at,name,email from blog join user on blog.user_id = user.id 
 """
     )
     result = cursor.fetchall()

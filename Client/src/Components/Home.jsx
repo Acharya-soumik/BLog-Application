@@ -31,7 +31,6 @@ function Home() {
       .then(res => setAllComments(res.data));
     setLoading(false);
   };
-  console.log(blogs);
   if (loading == true) {
     return <h2>Loading...</h2>;
   } else {
@@ -51,7 +50,7 @@ function Home() {
                 <Link
                   className="btn btn-dark"
                   to={{
-                    pathname: `/users/${ele.id}`,
+                    pathname: `/users/${ele.blog_id}`,
                     state: {
                       data: ele
                     }
