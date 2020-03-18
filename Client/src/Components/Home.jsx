@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Card } from "antd";
 import axios from "axios";
-function Home() {
+function Home(props) {
   const [blogs, setBlogs] = useState([]);
   const [comment, setComment] = useState("");
   const [allComments, setAllComments] = useState([]);
@@ -17,7 +17,7 @@ function Home() {
       .then(res => setAllComments(res.data));
     setLoading(false);
   }, [loading]);
-
+  console.log(props);
   const addComments = user => {
     setLoading(true);
     let obj = {

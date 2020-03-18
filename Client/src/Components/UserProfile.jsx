@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Avatar } from "antd";
 import { Upload, message, Icon } from "antd";
 import axios from "axios";
@@ -6,12 +6,28 @@ import axios from "axios";
 function UserProfile() {
   const [img, setImg] = useState("");
   const { Dragger } = Upload;
-
+  useEffect(() => {
+    let status = localStorage.getItem("isLoggedIn");
+    if (status == "true") {
+      let token = JSON.parse(localStorage.getItem("token"));
+      let data = {};
+      axios
+        .post("http://localhost:5000/details", data, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `bearer ${token}`
+          }
+        })
+        .then(res => setImg(res.data.image));
+    }
+    // GETTING USER
+  }, []);
+  const user_id = JSON.parse(window.localStorage.getItem("user_id"));
   const data = {
     name: "picture",
     userName: "soumik",
     multiple: false,
-    action: "http://127.0.0.1:5000/uploader",
+    action: "http://127.0.0.1:5000/uploader/" + user_id,
     onChange(info) {
       const { status } = info.file;
       if (status === "done") {
@@ -25,7 +41,15 @@ function UserProfile() {
   return (
     <div className="m-auto text-center">
       <h2>Profile Settings</h2>
-      <Avatar size={300} icon="user" />
+      <img
+        style={{
+          height: 100,
+          width: 100,
+          borderRadius: 50
+        }}
+        src={img}
+        alt="profile picture"
+      />
       <hr />
       <div className="col-md-5 m-auto">
         <Dragger {...data}>

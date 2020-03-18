@@ -7,6 +7,7 @@ from flask import request
 import json
 from flask_mysqldb import MySQL
 import jwt
+import os
 
 app = Flask(__name__)
 CORS(app)
@@ -99,18 +100,6 @@ def check_auth(email, password):
         return {"status": "login succesfull", "token": str(token), "u_id": res[0]["id"]}
     else:
         return {"status": "Incorrect Password"}
-
-    #    if val["email"] != email:
-    #         return {"status": "Incorrect Email Address"}
-    #     elif val["email"] == email:
-    #         user_salt = val["salt"]
-    #         user_pass = val["password"]
-    #     hex_pass = md5_hash(password, user_salt)
-    #     if hex_pass == user_pass:
-    #         token = jwt.encode(
-    #             {"id": val["id"], "email": val["email"]}, 'secret', algorithm="HS256")
-    #         return {"status": "login succesfull", "token": str(token), "u_id": val["id"]}
-    #     else:
 
 
 def find_user(u_id):
@@ -243,7 +232,7 @@ def new_comment():
 def all_blogs():
     cursor = mysql.connection.cursor()
     cursor.execute(
-        """select blog.id as blog_id ,user.id as id,catagory_id,title,content ,blog.created_at,name,email from blog join user on blog.user_id = user.id 
+        """select blog.id as blog_id ,user.id as id,catagory_id,title,content ,blog.created_at,name,email from blog join user on blog.user_id = user.id
 """
     )
     result = cursor.fetchall()
@@ -322,13 +311,32 @@ def delete_post():
         return "user deleted"
 
 
-@app.route('/uploader', methods=["POST"])
-def upload_file():
+@app.route('/uploader/<user_id>', methods=["POST"])
+def upload_file(user_id):
     f = request.files['picture']
-    print("=======>", f)
-    location = "../Client/public/image/" + f.filename
-    f.save(location)
-    return {"path": location}
+    cursor = mysql.connection.cursor()
+    try:
+        locationfolder = "../Client/public/image/" + str(user_id)
+        os.mkdir(locationfolder)
+        locationimage = "../Client/public/image/" + \
+            str(user_id) + "/" + f.filename
+        f.save(locationimage)
+        img_path = "./image/"+str(user_id)+"/"+f.filename
+        cursor.execute(
+            """update user set image = %s where id = %s""", (img_path, int(user_id)))
+        mysql.connection.commit()
+        cursor.close()
+        return {"path": img_path}
+    except OSError:
+        locationimage = "../Client/public/image/" + \
+            str(user_id) + "/" + f.filename
+        img_path = "./image/"+str(user_id)+"/"+f.filename
+        f.save(locationimage)
+        cursor.execute(
+            """update user set image = %s where id = %s""", (img_path, int(user_id)))
+        mysql.connection.commit()
+        cursor.close()
+        return {"path": img_path}
 
 
 if __name__ == "__main__":
