@@ -140,7 +140,8 @@ def getCatagory():
 def get_user_comments(u_id):
     cursor = mysql.connection.cursor()
     cursor.execute(
-        """SELECT * FROM comments WHERE blog_id = %s  """, (u_id,)
+        """SELECT comments.id,comment,comments.created_at,blog_id,user_id,user.name FROM comments join user on comments.user_id = user.id WHERE blog_id = %s  """, (
+            u_id,)
     )
     result = cursor.fetchall()
     print("result is ====...............", result)
