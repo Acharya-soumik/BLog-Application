@@ -63,24 +63,27 @@ function BLog_Page(props) {
                   Add
                 </button>
               </div>
-              {comment.map(ele => (
-                <Comment
-                  key={ele.id}
-                  author={<a>User</a>}
-                  avatar={
-                    <Avatar
-                      src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
-                      alt="Han Solo"
-                    />
-                  }
-                  content={<p>{ele.comment}</p>}
-                  datetime={
-                    <Tooltip title={ele.created_at}>
-                      <p>Posted few minutes ago...</p>
-                    </Tooltip>
-                  }
-                />
-              ))}
+              {comment.map(ele => {
+                console.log(ele);
+                return (
+                  <Comment
+                    key={ele.id}
+                    author={<a>{ele.name}</a>}
+                    avatar={
+                      <Avatar
+                        src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
+                        alt="Han Solo"
+                      />
+                    }
+                    content={<p>{ele.comment}</p>}
+                    datetime={
+                      <Tooltip title={ele.created_at}>
+                        <p>Posted at {ele.created_at}</p>
+                      </Tooltip>
+                    }
+                  />
+                );
+              })}
             </Panel>
           </Collapse>
         </div>
