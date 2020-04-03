@@ -256,7 +256,7 @@ def user_blogs():
     u_id = request.json["user_id"]
     cursor = mysql.connection.cursor()
     cursor.execute(
-        """SELECT * FROM blog where user_id = %s """, (u_id)
+        """SELECT * FROM blog where user_id = %s """, (u_id,)
     )
     result = cursor.fetchall()
     cursor.close()
